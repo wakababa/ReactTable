@@ -1,12 +1,26 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+import ReactTable from './Table';
 import reportWebVitals from './reportWebVitals';
+
+const handleData = (data) => { console.log(data) }
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <ReactTable tableData={[{
+      adı: "Altuğ",
+      soyadı: "Bülbül",
+      zevki: "Yazılım Geliştirici"
+    },
+    {
+      adı: "Muro",
+      soyadı: "Birinci",
+      zevki: "Fotoğrafçı"
+    }]}
+      onLoadData={handleData}
+      rowKeys={["adı", "soyadı", "zevki"]}
+    />
   </React.StrictMode>,
   document.getElementById('root')
 );

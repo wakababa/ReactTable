@@ -9,17 +9,17 @@ const handleData = (data) => { console.log(data) }
 ReactDOM.render(
   <React.StrictMode>
     <ReactTable tableData={[{
-      adı: "Altuğ",
-      soyadı: "Bülbül",
-      zevki: "Yazılım Geliştirici"
+      name: "Waka",
+      age: 28,
+      job: "Developer"
     },
     {
-      adı: "Muro",
-      soyadı: "Birinci",
-      zevki: "Fotoğrafçı"
+      name: "Muro",
+      age: 27,
+      job: "Photographer"
     }]}
       onLoadData={handleData}
-      rowKeys={["adı", "soyadı", "zevki"]}
+      rowKeys={["name", "age", "job"]}
     />
   </React.StrictMode>,
   document.getElementById('root')

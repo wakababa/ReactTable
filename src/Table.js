@@ -92,7 +92,6 @@ function ReactTable(props) {
   const handleCloseEdit = () => {
     setEditIndex(null)
     setEdit(false)
-
   }
   const handleChangeValue = (value, element) => setNewRowData({ ...newRowData, [element]: value })
 
@@ -103,6 +102,7 @@ function ReactTable(props) {
       setData(data)
       handleCloseEdit()
       setLoading(false)
+      setNewRowData({})
     }, 300);
 
   }

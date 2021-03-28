@@ -11,7 +11,8 @@ import {
   TextField,
   Typography,
   IconButton,
-  LinearProgress
+  LinearProgress,
+  Button
 } from '@material-ui/core';
 
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
@@ -19,6 +20,8 @@ import DeleteOutlineOutlinedIcon from '@material-ui/icons/DeleteOutlineOutlined'
 import CloseIcon from '@material-ui/icons/Close';
 import CheckIcon from '@material-ui/icons/Check';
 import AddIcon from '@material-ui/icons/Add';
+import ArrowUpwardOutlinedIcon from '@material-ui/icons/ArrowUpwardOutlined';
+import ArrowDownwardOutlinedIcon from '@material-ui/icons/ArrowDownwardOutlined';
 
 const useStyles = makeStyles({
   table: {
@@ -26,7 +29,7 @@ const useStyles = makeStyles({
     marginTop: 10,
     minWidth: 600,
     maxWidth: 800,
-    background: "whitesmoke"
+    background: "white"
   },
   tabcell: {
     height: "50px",
@@ -76,6 +79,8 @@ function ReactTable(props) {
   const [editIndex, setEditIndex] = useState(null)
   const [newRowData, setNewRowData] = useState({})
   const [loading, setLoading] = useState(false)
+  const [sortingItem, setSortingItem] = useState(null)
+  const [sortType, setSortType] = useState(false)
   const [data, setData] = useState([])
   const keys = rowKeys ?? Object?.keys(data[0] ?? {})
 
@@ -92,6 +97,7 @@ function ReactTable(props) {
   const handleCloseEdit = () => {
     setEditIndex(null)
     setEdit(false)
+    data[data.length - 1][keys[0]] === "" && setData(data.splice(0, data.length - 1))
   }
   const handleChangeValue = (value, element) => setNewRowData({ ...newRowData, [element]: value })
 
@@ -127,6 +133,12 @@ function ReactTable(props) {
     handleEdit(data.length)
   }
 
+  const handleSort = (item) => {
+    setSortingItem(item)
+    setSortType(!sortType)
+    !sortType && setData([...data.sort((a, b) => a[item] < b[item] ? -1 : a[item] > b[item] ? 1 : 0)])
+    sortType && setData([...data.sort((a, b) => a[item] < b[item] ? 1 : a[item] > b[item] ? -1 : 0)])
+  }
 
   useEffect(() => {
     onLoadData(data)
@@ -143,9 +155,24 @@ function ReactTable(props) {
               <TableCell
                 key={key}
                 className={classes.tabcell}
-                style={{ fontWeight: "bold" }}>{item}</TableCell>))}
+                style={{ fontWeight: "bold" }}>
+                <Button
+                  onClick={() => handleSort(item)}
+                  endIcon={
+                    <>
+                      {sortType && sortingItem === item &&
+                        <ArrowUpwardOutlinedIcon />}
+                      {!sortType && sortingItem === item &&
+                        <ArrowDownwardOutlinedIcon />}
+                    </>
+                  }>
+                  {item}
+                </Button>
+              </TableCell>))}
             <TableCell>
-              <IconButton style={{ float: "right" }} onClick={() => handleAddRow()}>
+              <IconButton
+                style={{ float: "right" }}
+                onClick={() => handleAddRow()}>
                 <AddIcon />
               </IconButton></TableCell>
           </TableRow>
@@ -156,7 +183,9 @@ function ReactTable(props) {
             <TableRow key={key}>
               {
                 keys.map((element, id) => (
-                  <TableCell onDoubleClick={() => handleEdit(key)} className={classes.tabcell} key={id}>
+                  <TableCell
+                    onDoubleClick={() => handleEdit(key)}
+                    className={classes.tabcell} key={id}>
                     {edit && editIndex === key ?
                       <TextField
                         onChange={(e) => handleChangeValue(e.target.value, element)}

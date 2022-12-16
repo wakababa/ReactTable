@@ -3,7 +3,6 @@ import {
   makeStyles,
   Table,
   TableBody,
-  TableCell,
   TableContainer,
   TableHead,
   TableRow,
@@ -45,28 +44,28 @@ const useStyles = makeStyles({
 const ToolbarCloseCheck = (props) => {
   const { index, loading, onCloseEdit, onSaveEdit } = props
   return (
-    <TableCell >
+    <th >
       <IconButton disabled={loading} onClick={() => onCloseEdit()} aria-label="close" >
         <CloseIcon />
       </IconButton>
       <IconButton disabled={loading} onClick={() => onSaveEdit(index)} aria-label="check">
         <CheckIcon />
       </IconButton>
-    </TableCell>
+    </th>
   )
 }
 
 const ToolbarEditDelete = (props) => {
   const { index, loading, onDelete, onEdit } = props
   return (
-    <TableCell >
+    <th >
       <IconButton disabled={loading} onClick={() => onDelete(index)} aria-label="delete" >
         <DeleteOutlineOutlinedIcon />
       </IconButton>
       <IconButton disabled={loading} onClick={() => onEdit(index)} aria-label="edit">
         <EditOutlinedIcon />
       </IconButton>
-    </TableCell>
+    </th>
   )
 }
 
@@ -148,11 +147,11 @@ function ReactTable(props) {
   return (
     <TableContainer className={classes.table} component={Paper} >
       {loading && <LinearProgress />}
-      <Table aria-label="simple table">
+      <table aria-label="simple table">
         <TableHead>
           <TableRow>
             {keys?.map((item, key) => (
-              <TableCell
+              <td
                 key={key}
                 className={classes.tabcell}
                 style={{ fontWeight: "bold" }}>
@@ -168,32 +167,33 @@ function ReactTable(props) {
                   }>
                   {item}
                 </Button>
-              </TableCell>))}
-            <TableCell>
+              </td>))}
+            <th>
               <IconButton
                 style={{ float: "right" }}
                 onClick={() => handleAddRow()}>
                 <AddIcon />
-              </IconButton></TableCell>
+              </IconButton></th>
           </TableRow>
         </TableHead>
         <TableBody>
 
           {data?.map((item, key) => (
-            <TableRow key={key}>
+            <tr key={key}>
               {
                 keys.map((element, id) => (
-                  <TableCell
+                  <th
+                  style={{textAlign:"left",padding:5}}
                     onDoubleClick={() => handleEdit(key)}
                     className={classes.tabcell} key={id}>
                     {edit && editIndex === key ?
-                      <TextField
+                      <input
                         onChange={(e) => handleChangeValue(e.target.value, element)}
                         defaultValue={data[key][element]} /> :
                       <Typography
                         variant="subtitle1">{data[key][element]}
                       </Typography>}
-                  </TableCell>
+                  </th>
                 )
                 )}
               {/* Toolbar */}
@@ -214,10 +214,10 @@ function ReactTable(props) {
                     onEdit={handleEdit}
                   />
               }
-            </TableRow>
+            </tr>
           ))}
         </TableBody>
-      </Table>
+      </table>
     </TableContainer>
   );
 }
